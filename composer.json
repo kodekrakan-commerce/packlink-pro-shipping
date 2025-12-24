@@ -1,5 +1,5 @@
 {
-  "name": "kodekrakan-commerce/packlink-pro-shipping",
+  "name": "packlink/woocommerce-dev",
   "description": "Packlink PRO WooCommerce Integration (Patched with TaskRunner killswitch)",
   "version": "3.6.1-wl",
   "type": "wordpress-plugin",
