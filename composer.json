@@ -1,8 +1,8 @@
 {
-  "name": "packlink/woocommerce-dev",
-  "description": "Packlink WooCommerce Integration",
-  "version": "3.6.1",
-  "type": "library",
+  "name": "kodekrakan-commerce/packlink-pro-shipping",
+  "description": "Packlink PRO WooCommerce Integration (Patched with TaskRunner killswitch)",
+  "version": "3.6.1-wl",
+  "type": "wordpress-plugin",
   "require": {
     "php": ">=5.5",
     "wp-coding-standards/wpcs": "2.3.*",
