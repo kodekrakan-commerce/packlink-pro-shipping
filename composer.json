@@ -1,7 +1,7 @@
 {
   "name": "packlink/woocommerce-dev",
   "description": "Packlink PRO WooCommerce Integration (Patched with TaskRunner killswitch)",
-  "version": "3.6.1-wl",
+  "version": "3.6.1",
   "type": "wordpress-plugin",
   "repositories": [
     {
