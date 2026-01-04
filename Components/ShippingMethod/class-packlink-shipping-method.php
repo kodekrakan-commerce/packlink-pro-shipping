@@ -166,6 +166,15 @@ class Packlink_Shipping_Method extends \WC_Shipping_Method {
 	 * @return bool
 	 */
 	public function is_available( $package ) {
+		// CRITICAL: Require destination country before showing shipping method
+		// Fix for warehouse fallback bug - hide shipping until customer enters address
+		// This prevents showing incorrect warehouse→warehouse shipping costs (~€3.50)
+		// when destination is unknown. Express Checkout (Apple Pay/Google Pay/Link)
+		// is safe because Stripe collects address before querying shipping rates.
+		if ( empty( $package['destination']['country'] ) ) {
+			return false;
+		}
+
 		$shipping_method = $this->get_packlink_shipping_method();
 
 		return $shipping_method && $this->load_shipping_costs( $package, $shipping_method );
