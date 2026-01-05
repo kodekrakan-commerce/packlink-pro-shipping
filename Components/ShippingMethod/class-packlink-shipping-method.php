@@ -166,12 +166,26 @@ class Packlink_Shipping_Method extends \WC_Shipping_Method {
 	 * @return bool
 	 */
 	public function is_available( $package ) {
-		// CRITICAL: Require destination country before showing shipping method
+		// CRITICAL: Require COMPLETE destination address before showing shipping method
 		// Fix for warehouse fallback bug - hide shipping until customer enters address
-		// This prevents showing incorrect warehouse→warehouse shipping costs (~€3.50)
-		// when destination is unknown. Express Checkout (Apple Pay/Google Pay/Link)
-		// is safe because Stripe collects address before querying shipping rates.
-		if ( empty( $package['destination']['country'] ) ) {
+		//
+		// WooCommerce defaults country to store base (PT for Portugal stores) even for
+		// guests who haven't entered anything. We must check for postcode OR city to
+		// confirm customer has actually entered a real address, not just the default country.
+		//
+		// Without this check, guests see warehouse→warehouse shipping costs (~€5) because:
+		// - $to_country = 'PT' (WooCommerce default)
+		// - $to_zip = warehouse postal code (fallback from load_shipping_costs line 373)
+		// - Result: Portugal warehouse → Portugal destination = incorrect local rate
+		//
+		// Express Checkout (Apple Pay/Google Pay/Link) is safe because Stripe collects
+		// complete address before querying shipping rates.
+		$has_country = ! empty( $package['destination']['country'] );
+		$has_postcode = ! empty( $package['destination']['postcode'] );
+		$has_city = ! empty( $package['destination']['city'] );
+
+		// Require country AND at least one of (postcode or city)
+		if ( ! $has_country || ( ! $has_postcode && ! $has_city ) ) {
 			return false;
 		}
 
